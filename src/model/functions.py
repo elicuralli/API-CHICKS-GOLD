@@ -8,6 +8,7 @@ class Actions_Gallon():
         self.y_capacity = y_capacity
         self.x_level = 0
         self.y_level = 0
+
     
     def fill(self,gallon):
         
@@ -17,62 +18,59 @@ class Actions_Gallon():
         elif gallon =="y":
             self.y_level = self.y_capacity
     
-    def empty(self,gallon):
-        #empty the specified gallon completely 
-        
-        if gallon =="x":
-            self.x_level = 0
-        elif gallon =="y":
-            self.y_level = 0
     
-    def transfer(self,source,target):
+    def transfer(self,source,target,amount):
         #transfer water from the source gallon to the target gallon
-        
-        max_transfer = min(self.x_level if source == 'x' else self.y_level,
-                       self.y_capacity - (self.x_level if target == 'x' else self.y_level)) #this operation define how much water we can transfer 
-        
-        #update water level
-        
-        if source =='x':
-            self.x_level -= max_transfer
-        else:
-            self.y_level -= max_transfer
 
-        if target =='x':
-            self.x_level += max_transfer
-        else:
-            self.y_level += max_transfer
-    
-    def is_z_reached(self,z_measure):
+        if source == "x" and target == "y":
+        # Transfiere desde x a y
 
-        #fill, empty,transfer gallons, until z is reached or until it is not posible continue
-        
-        while self.x_level + self.y_level != z_measure:
-
-            #verify z is reached or not in every cicle
-            if self.x_level+self.y_level == z_measure:
-                break
-
-            #find gallon with less capacity to fill
-            if self.x_level < self.y_level:
-                source = 'x'
-                target = 'y'
+            if self.x_level >= amount:
+                self.x_level -= amount
+                self.y_level += amount
             else:
-                source = 'y'
-                target = 'x'
-            
-            #fill gallon with less capacity
-            self.fill(source)
+                self.y_level += self.x_level
+                self.x_level = 0
 
-            #transfer water to the target gallon
-            self.transfer(source,target)
-
-            #empty source gallon
-            self.empty(source)
-
-            #verify z is reached or not in every cicle
-            if self.x_level+self.y_level == z_measure:
-                break
+        elif source == "y" and target == "x":
+            # Transfiere desde y a x
+            if self.y_level >= amount:
+                self.y_level -= amount
+                self.x_level += amount
+            else:
+                self.x_level += self.y_level
+                self.y_level = 0
+    
+    def is_z_reached(self, z_measure):
         
-        #here return level water in every gallon
+        if self.x_level < self.y_level:
+            source = 'x'
+            target = 'y'
+        else:
+            source = 'y'
+            target = 'x'
+
+        while self.x_level != z_measure and self.y_level != z_measure:
+            # Verifica si es posible continuar llenando y transfiriendo
+            if (self.x_level == self.x_capacity and self.y_level == self.y_capacity) or (self.x_level == 0 and self.y_level == 0):
+                break
+
+            # Calcula cuánta agua se puede agregar sin superar z
+            remaining_space_x = z_measure - self.x_level
+            remaining_space_y = z_measure - self.y_level
+
+            # Llena el galón con menos capacidad sin superar z
+            if source == 'x':
+                if self.y_level + self.x_level <= z_measure:
+                    self.transfer(source, target, remaining_space_x)
+                    self.fill(source, remaining_space_x)
+                else:
+                    break
+            else:
+                if self.x_level + self.y_level <= z_measure:
+                    self.transfer(source, target, remaining_space_y)
+                    self.fill(source, remaining_space_y)
+                else:
+                    break
+
         return self.x_level, self.y_level
