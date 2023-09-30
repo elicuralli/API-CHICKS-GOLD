@@ -37,7 +37,24 @@ def add_values():
     #check if z reached with the function created 
         x_level, y_level = gallon_manager.is_z_reached(z_measure)
 
-        return jsonify({"ok": True, "status": 200, "data": {"message": "Z has been reached", "x_level": x_level, "y_level": y_level}})
+        result = {
+            "ok": True,
+            "status": 200,
+            "data": {
+                "message": "Z has been reached",
+                "x_level": x_level,
+                "y_level": y_level
+            }
+        }
+
+        return jsonify(result)
 
     except Exception as ex:
-        return jsonify({"ok":False,"status": 500,"data":{"message": str(ex)}})
+        result = {
+            "ok": False,
+            "status": 500,
+            "data": {
+                "message": str(ex)
+            }
+        }
+        return jsonify(result), 500 
