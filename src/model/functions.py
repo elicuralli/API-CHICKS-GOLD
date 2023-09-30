@@ -23,7 +23,6 @@ class Actions_Gallon():
         #transfer water from the source gallon to the target gallon
 
         if source == "x" and target == "y":
-        # Transfiere desde x a y
 
             if self.x_level >= amount:
                 self.x_level -= amount
@@ -42,7 +41,9 @@ class Actions_Gallon():
                 self.y_level = 0
     
     def is_z_reached(self, z_measure):
-        
+
+        #check level of water in the gallons to define source and target
+
         if self.x_level < self.y_level:
             source = 'x'
             target = 'y'
@@ -50,16 +51,18 @@ class Actions_Gallon():
             source = 'y'
             target = 'x'
 
+        #we use a while cicle to check is Z reached or not, repeating the process in every iteration
         while self.x_level != z_measure and self.y_level != z_measure:
-            # Verifica si es posible continuar llenando y transfiriendo
+            
+            #Check if it is possible to continue filling and transferring 
             if (self.x_level == self.x_capacity and self.y_level == self.y_capacity) or (self.x_level == 0 and self.y_level == 0):
                 break
 
-            # Calcula cuánta agua se puede agregar sin superar z
+            # Calculate how much water can be added without exceeding z
             remaining_space_x = z_measure - self.x_level
             remaining_space_y = z_measure - self.y_level
 
-            # Llena el galón con menos capacidad sin superar z
+            # Fill the gallon with less capacity without exceeding z
             if source == 'x':
                 if self.y_level + self.x_level <= z_measure:
                     self.transfer(source, target, remaining_space_x)

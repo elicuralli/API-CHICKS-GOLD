@@ -23,6 +23,7 @@ def add_values():
         y_level = int(y_level_str)
         z_measure = int(z_measure_str)
         
+        #calculate which one has less capacity 
         menor = min(x_level,y_level)
 
         if  menor > z_measure:
@@ -33,6 +34,7 @@ def add_values():
 
         gallon_manager = Actions_Gallon(x_level,y_level)
 
+    #check if z reached with the function created 
         x_level, y_level = gallon_manager.is_z_reached(z_measure)
 
         return jsonify({"ok": True, "status": 200, "data": {"message": "Z has been reached", "x_level": x_level, "y_level": y_level}})
