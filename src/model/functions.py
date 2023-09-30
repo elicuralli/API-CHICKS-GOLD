@@ -1,5 +1,5 @@
 #create the class to define the functions that we need
-#fill,empty,transfer 
+#fill,transfer 
 
 class Actions_Gallon():
     
