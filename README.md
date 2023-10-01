@@ -143,3 +143,16 @@ json request:
   }
 }
 ```
+#### Just in case the values for Z provided from the user are greater than the expect it 
+```
+{
+  "error": "There's no solution Z is greater than X and Y"
+}
+```
+#### when X and Y exceed Z
+
+```
+{
+  "error": "There's no solution  X and Y exceed Z "
+}
+```
